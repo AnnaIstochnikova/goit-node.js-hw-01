@@ -26,7 +26,8 @@ async function getContactById(contactId) {
     const data = await fs.readFile(contactsPath, 'utf-8');
     const contacts = JSON.parse(data);
     rl.close();
-    return contacts.find(contact => contact.id === contactId);
+    const { name, email, phone } = contacts.find(contact => contact.id === contactId);
+    return ` name: ${name} \n email: ${email} \n phone: ${phone}`.cyan;
   } catch (err) {
     return console.log(err.message);
   }
