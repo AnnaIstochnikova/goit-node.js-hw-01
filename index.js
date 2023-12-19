@@ -1,6 +1,7 @@
 const { program } = require('commander');
-const { listContacts, getContactById, addContact, removeContact } = require('./contacts');
 const argv = program.opts();
+
+const { listContacts, getContactById, addContact, removeContact } = require('./contacts');
 
 program
   .option('-a, --action [string]', 'choose action')
