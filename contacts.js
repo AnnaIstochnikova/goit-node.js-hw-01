@@ -1,18 +1,19 @@
-const path = require('path');
-const colors = require('colors');
-const fs = require('fs').promises;
-const readline = require('readline');
+import pkg from 'colors';
+import { promises } from 'fs';
+import path from 'path';
+import readline from 'readline';
 
+const { colors } = pkg;
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-const contactsPath = path.join(__dirname, 'db', 'contacts.json');
+const contactsPath = path.join(process.cwd(), 'db/contacts.json');
 
 async function listContacts() {
   try {
-    const data = await fs.readFile(contactsPath, 'utf-8');
+    const data = await promises.readFile(contactsPath, 'utf-8');
     const contacts = JSON.parse(data);
     rl.close();
     return contacts;
@@ -23,7 +24,7 @@ async function listContacts() {
 
 async function getContactById(contactId) {
   try {
-    const data = await fs.readFile(contactsPath, 'utf-8');
+    const data = await promises.readFile(contactsPath, 'utf-8');
     const contacts = JSON.parse(data);
     rl.close();
     const { name, email, phone } = contacts.find(contact => contact.id === contactId);
@@ -35,11 +36,11 @@ async function getContactById(contactId) {
 
 async function removeContact(contactId) {
   try {
-    const data = await fs.readFile(contactsPath, 'utf-8');
+    const data = await promises.readFile(contactsPath, 'utf-8');
     const allContacts = JSON.parse(data);
     const contactsAfterDelete = allContacts.filter(contact => contact.id !== contactId);
     try {
-      await fs.writeFile(contactsPath, JSON.stringify(contactsAfterDelete));
+      await promises.writeFile(contactsPath, JSON.stringify(contactsAfterDelete));
 
       contactsAfterDelete.length === allContacts.length
         ? console.log("Sorry, but there's no such contact.".bgRed)
@@ -57,13 +58,13 @@ async function removeContact(contactId) {
 
 async function addContact(id, name, email, phone) {
   try {
-    const data = await fs.readFile(contactsPath, 'utf-8');
+    const data = await promises.readFile(contactsPath, 'utf-8');
     const allContacts = JSON.parse(data);
     const newContact = { id, name, email, phone };
     allContacts.push(newContact);
 
     try {
-      await fs.writeFile(contactsPath, JSON.stringify(allContacts));
+      await promises.writeFile(contactsPath, JSON.stringify(allContacts));
       console.log('New contact has been successfully added!'.bgGreen);
       rl.close();
       return;
@@ -75,9 +76,4 @@ async function addContact(id, name, email, phone) {
   }
 }
 
-module.exports = {
-  addContact,
-  listContacts,
-  removeContact,
-  getContactById,
-};
+export { addContact, listContacts, removeContact, getContactById };

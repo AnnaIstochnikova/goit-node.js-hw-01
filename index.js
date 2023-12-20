@@ -1,7 +1,7 @@
-const { program } = require('commander');
+import { program } from 'commander';
 const argv = program.opts();
 
-const { listContacts, getContactById, addContact, removeContact } = require('./contacts');
+import { listContacts, getContactById, addContact, removeContact } from './contacts.js';
 
 program
   .option('-a, --action [string]', 'choose action')
